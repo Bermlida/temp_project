@@ -19,12 +19,14 @@ class UserRepository
         return $user;
     }
 
-    public function update(array $data, int $id) 
+    public function update(array $data, int $id)
     {
         $user = $this->user->find($id);
-        foreach($data)
-        $this->user->where('id', $id)->update($data);
-        
+        foreach ($data as $key => $value) {
+            if (isset($user->$key)) {
+                $user->$key = $value;
+            }
+        }
         return $user;
     }
 }

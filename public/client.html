@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title></title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js" ></script>
+        <script>
+
+        function callback(param)
+        {
+            //var message = "" + param;
+            for(i in param){
+                alert(i + " : " + param[i]);
+            }
+        }
+
+         var Submit=function(){
+            var URLs="users";
+          
+            $.ajax({
+                url: URLs,
+                data: $('#sentToBack').serialize(),
+                type:"POST",
+                dataType:'json',
+
+                success: callback,
+
+                 error:function(xhr, ajaxOptions, thrownError){
+                    for(i in xhr){
+                        alert(i + ":" + xhr[i]);
+                    }
+                 }
+            });
+           
+        }
+        </script>
+    </head>
+    <body>
+        <form id="sentToBack">
+            <input type="text" name="name" value="name"/>
+            <input type="text" name="email" value="email@email.email"/>
+            <input type="text" name="password" value="password"/>
+            <input type="button" value="reset" onClick="$('#sendToBack').find('input:text').val('')">
+            <input type="button"  value="送出" onClick="Submit()"/>
+        </form>
+    </body>
+</html>

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Repositories\UserRepository;
 
-class UserService
+class UserService extends Service
 {
     protected $user_repository;
 
@@ -15,14 +15,24 @@ class UserService
 
     public function addUser(array $data)
     {
-        $new_user = $this->user_repository->create($data);
-        return $new_user;
+        $user = $this->user_repository->create($data);
+        $this->result_flag = true;
+        $this->result_data = $user;
+        return $this;
     }
 
     public function updateUser(array $data, $id)
     {
         $user = $this->user_repository->update($data, $id);
-        return $user;
+        
+        if (!is_null($user)) {
+            $this->result_flag = true;
+            $this->result_data = $user;
+        } else {
+            $this->result_flag = false;
+            $this->result_message = 'user not found, maybe user id incorrect';
+        }
+        return $this;
     }
 }
 

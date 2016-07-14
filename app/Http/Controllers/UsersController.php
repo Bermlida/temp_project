@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\UserService;
+
 
 class UsersController extends Controller
 {
@@ -25,7 +29,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        print "12345<pre>";        
+        print "66666<pre>";        
         var_dump($this);
         //exit();   
     }
@@ -46,11 +50,11 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         $data = $request->all();
         $result = $this->user_service->addUser($data);
-        echo (string)($result);
+        echo $result;
     }
 
     /**
@@ -86,7 +90,7 @@ class UsersController extends Controller
     {
         $data = $request->all();
         $result = $this->user_service->updateUser($data, $id);
-        echo (string)($result);
+        echo $result;
     }
 
     /**
