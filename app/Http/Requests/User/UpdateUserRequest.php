@@ -25,8 +25,13 @@ class UpdateUserRequest extends Request
     {
         return [
             'name' => 'max:255',
-            'email' => 'email|max:255|unique:users,email',
+            'email' => 'email|max:255|unique:users,email,' . $this->route('users'),
             'password' => 'min:6',
         ];
+    }
+
+    public function response(array $errors)
+    {
+        return response()->json($errors);
     }
 }

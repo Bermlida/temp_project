@@ -29,9 +29,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        print "66666<pre>";        
-        var_dump($this);
-        //exit();   
+        $result = $this->user_service->showUserList();        
+        return response()->json((array)$result, 200);
     }
 
     /**
@@ -54,7 +53,7 @@ class UsersController extends Controller
     {
         $data = $request->all();
         $result = $this->user_service->addUser($data);
-        echo $result;
+        return response()->json((array)$result, 201);
     }
 
     /**
@@ -65,7 +64,8 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        $result = $this->user_service->showUser($id)->toArray();
+        return response()->json($result, ($result['flag'] ? 200 : 404));
     }
 
     /**
@@ -89,8 +89,8 @@ class UsersController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         $data = $request->all();
-        $result = $this->user_service->updateUser($data, $id);
-        return response()->json($result->toArray());
+        $result = $this->user_service->updateUser($data, $id)->toArray();
+        return response()->json($result, ($result['flag'] ? 200 : 404));
     }
 
     /**
@@ -101,7 +101,8 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $result = $this->user_service->deleteUser($id)->toArray();
+        return response()->json($result, ($result['flag'] ? 200 : 404));
     }
 
 

@@ -39,6 +39,14 @@ abstract class Service
     {
         return $this->toJson();
     }
+
+    public function __get($name)
+    {
+        if($name == 'result'){
+            return $this->toObject();
+        }
+        return null;
+    }
 }
 
 /* End of file Service.php */

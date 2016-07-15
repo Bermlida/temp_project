@@ -13,6 +13,18 @@ class UserRepository
         $this->user = $user;
     }
 
+    public function find()
+    {
+        $users = $this->user->all();
+        return $users;
+    }
+
+    public function get(int $id)
+    {
+        $user = $this->user->find($id);
+        return $user;
+    }
+
     public function create(array $data)
     {
         $user = $this->user->create($data);
@@ -22,7 +34,6 @@ class UserRepository
     public function update(array $data, int $id)
     {
         $user = $this->user->find($id);
-
         if (!is_null($user)) {
             foreach ($data as $key => $value) {
                 if (isset($user->$key)) {
@@ -30,9 +41,17 @@ class UserRepository
                 }
             }
             $user->save();
-        }
-        
+        }        
         return $user;
+    }
+
+    public function delete(int $id)
+    {
+        $user = $this->user->find($id);
+        if (!is_null($user)) {
+            return $user->forceDelete();
+        } else
+            return $user;
     }
 }
 

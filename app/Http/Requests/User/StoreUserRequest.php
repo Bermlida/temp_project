@@ -29,4 +29,9 @@ class StoreUserRequest extends Request
             'password' => 'required|min:6',
         ];
     }
+
+    public function response(array $errors)
+    {
+        return response()->json($errors);
+    }
 }
