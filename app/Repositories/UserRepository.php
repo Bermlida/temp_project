@@ -22,11 +22,16 @@ class UserRepository
     public function update(array $data, int $id)
     {
         $user = $this->user->find($id);
-        foreach ($data as $key => $value) {
-            if (isset($user->$key)) {
-                $user->$key = $value;
+
+        if (!is_null($user)) {
+            foreach ($data as $key => $value) {
+                if (isset($user->$key)) {
+                    $user->$key = $value;
+                }
             }
+            $user->save();
         }
+        
         return $user;
     }
 }

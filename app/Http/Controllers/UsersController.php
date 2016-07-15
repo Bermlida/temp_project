@@ -86,11 +86,11 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $data = $request->all();
         $result = $this->user_service->updateUser($data, $id);
-        echo $result;
+        return response()->json($result->toArray());
     }
 
     /**
@@ -100,6 +100,12 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
+    {
+        //
+    }
+
+
+    public function test_custum()
     {
         //
     }
