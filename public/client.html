@@ -5,42 +5,52 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js" ></script>
         <script>
 
-        function callback(param)
+        function callback_func(data)
         {
-            //var message = "" + param;
-            for(i in param){
-                alert(i + " : " + param[i]);
-            }
+
         }
 
-         var Submit=function(){
-            var URLs="users";
-          
+        var Submit=function(){
+            var request_url = $("#url").val();
+            var request_type = $("#type").val();
+            alert(request_url); alert(request_type);
+
             $.ajax({
-                url: URLs,
+                url: request_url,
                 data: $('#sentToBack').serialize(),
-                type:"GET",
-                dataType:'json',
-
-                success: callback,
-
-                 error:function(xhr, ajaxOptions, thrownError){
-                    for(i in xhr){
-                        alert(i + ":" + xhr[i]);
+                type: request_type,
+                dataType: 'jsonp',
+                jsonpCallback: 'callback_func',
+                success: function(data){
+                    for(i in data){
+                        alert(i + ":::" + data[i]);
                     }
-                 }
-            });
-           
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    for(i in xhr){
+                        alert(i + ":::" + xhr[i]);
+                    }
+                }
+            });           
         }
+
         </script>
     </head>
     <body>
         <form id="sentToBack">
-            <input type="text" name="name" value="name"/>
-            <input type="text" name="email" value="email@email.email"/>
-            <input type="text" name="password" value="password"/>
-            <input type="button" value="reset" onClick="$('#sendToBack').find('input:text').val('')">
-            <input type="button"  value="送出" onClick="Submit()"/>
+            <input type="text" id="url" value="http://laravel.framework/users"/>
+            <hr/>
+            <select id="type">
+                <option value="POST">POST</option>
+                <option value="GET">GET</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+            <hr/>
+            <br><input type="name"  value="name123"/>
+            <br><input type="email"  value="email123@ccr.sow"/>
+            <br><input type="password"  value="password123456"/>
+            <br><input type="button"  value="送出" onClick="Submit()"/>
         </form>
     </body>
 </html>

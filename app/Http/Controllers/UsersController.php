@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Validator;
-
-use Illuminate\Http\Request;
+use Request;
+//use Illuminate\Http\Request;
 
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
@@ -30,8 +30,12 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $result = $this->user_service->showUserList();        
-        return response()->json((array)$result, 200);
+        $callback = Request::input("callback");
+        $result = $this->user_service->showUserList();
+        
+        return response()
+                        ->json((array)$result, 200)
+                        ->setCallback($callback);
     }
 
     /**
@@ -55,8 +59,12 @@ class UsersController extends Controller
     public function store(StoreUserRequest $request)
     {
         $data = $request->all();
+        $callback = $request->input("callback");
         $result = $this->user_service->addUser($data);
-        return response()->json((array)$result, 201);
+
+        return response()
+                        ->json((array)$result, 201)
+                        ->setCallback($callback);
     }
 
     /**
@@ -67,8 +75,12 @@ class UsersController extends Controller
      */
     public function show($id)
     {
+        $callback = Request::input('callback');
         $result = $this->user_service->showUser($id)->toArray();
-        return response()->json($result, ($result['flag'] ? 200 : 404));
+
+        return response()
+                        ->json($result, ($result['flag'] ? 200 : 404))
+                        ->setCallback($callback);
     }
 
     /**
@@ -92,8 +104,12 @@ class UsersController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         $data = $request->all();
+        $callback = $request->input("callback");
         $result = $this->user_service->updateUser($data, $id)->toArray();
-        return response()->json($result, ($result['flag'] ? 200 : 404));
+
+        return response()
+                        ->json($result, ($result['flag'] ? 200 : 404))
+                        ->setCallback($callback);
     }
 
     /**
