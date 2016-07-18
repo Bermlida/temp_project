@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\UserService;
+use App\Models\Repositories\UserRepository;
 
 
 class UsersController extends Controller
@@ -40,7 +41,9 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        $user_repository = new UserRepository();
+        print "<pre>";
+        var_dump($user_repository->user);
     }
 
     /**
