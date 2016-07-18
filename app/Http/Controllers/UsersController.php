@@ -42,7 +42,7 @@ class UsersController extends Controller
     public function create()
     {
         $user_repository = new UserRepository();
-        print "<pre>";
+        print "<pre>" . \App\Providers\RouteServiceProvider::class . '<br>';
         var_dump($user_repository->user);
     }
 

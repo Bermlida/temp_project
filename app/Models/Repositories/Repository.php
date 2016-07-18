@@ -7,7 +7,7 @@ abstract class Repository
     public function __construct()
     {
         $class = new \ReflectionClass($this);
-        $properties = $class->getProperties(\ReflectionProperty::IS_PROTECTED);
+        $properties = $class->getProperties(\ReflectionProperty::IS_PRIVATE);
         foreach ($properties as $property) {
             $property->setAccessible(true);
             $property_name = $property->getName();
@@ -27,25 +27,26 @@ abstract class Repository
 
             $namespace = (strpos($property_value, "\\") === false) ? "App\\Models\\Repositories\\Entities\\" : "";
             $property_value = $namespace . $property_value;
-            $this->$property_name = new $property_value;
+            $property->setValue($this, new $property_value);
         }
     }
 
     public function __get($name) 
     {
-        if (isset($this->$name) && is_object($this->$name)) {
-            $class = new \ReflectionClass($this);
+        $class = new \ReflectionClass($this);
+        if ($class->hasProperty($name)) {
             $property = $class->getProperty($name);
-
-            if ($property->isProtected()) {
+            if ($property->isPrivate()) {
                 $property->setAccessible(true);
                 $property_value = $property->getValue($this);
                 
-                $property_parents = array();
-                $property_class = new \ReflectionClass($property_value);
-                while ($property_parent = $property_class->getParentClass()) {
-                    $property_parents[] = $property_parent->getName();
-                    $property_class = $property_parent;
+                $property_parents = [];
+                if (is_object($property_value)) {
+                    $property_class = new \ReflectionClass($property_value);
+                    while ($property_parent = $property_class->getParentClass()) {
+                        $property_parents[] = $property_parent->getName();
+                        $property_class = $property_parent;
+                    }
                 }
 
                 if (in_array("Illuminate\\Database\\Eloquent\\Model", $property_parents)) {
