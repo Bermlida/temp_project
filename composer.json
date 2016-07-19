@@ -22,7 +22,8 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files": ["app/Models/Helpers/CommonHelper.php"]
     },
     "autoload-dev": {
         "classmap": [

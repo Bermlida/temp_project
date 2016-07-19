@@ -10,7 +10,8 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\UserService;
 use App\Models\Repositories\UserRepository;
-
+//use function App\Models\Helpers\hello_world;
+use App\Models\Helpers\Helper;
 
 class UsersController extends Controller
 {
@@ -18,7 +19,9 @@ class UsersController extends Controller
     protected $user_service;
 
     public function __construct(UserService $user_service)
-    {
+    {   //print hello_world();
+        print (new Helper())->hello_world(1,2,3)->assss_world('Assssssss!!!!!!!')->result . '<br>';
+        print Helper::hello_world() . '<br>';
         $this->user_service = $user_service;
     }
 
