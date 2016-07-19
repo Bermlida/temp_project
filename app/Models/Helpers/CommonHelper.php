@@ -8,9 +8,9 @@ if (! function_exists('hello_world')) {
      * 
      * @return string
      */
-    function hello_world()
+    function hello_world(string $data)
     {
-        return "Hello World";
+        return $data . "Hello World";
     }
 }
 

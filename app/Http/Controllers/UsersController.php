@@ -19,9 +19,10 @@ class UsersController extends Controller
     protected $user_service;
 
     public function __construct(UserService $user_service)
-    {   //print hello_world();
-        print (new Helper())->hello_world(1,2,3)->assss_world('Assssssss!!!!!!!')->result . '<br>';
-        print Helper::hello_world() . '<br>';
+    {
+        //print Helper::hello_world('oh~~~~');
+        //print (new Helper('mamamama', ['assss_world' => 'AhAhAhCheee']))->hello_world()->assss_world('test')->result;
+        //print (new Helper())->hello_world('NaNaNa')->assss_world('test')->result;
         $this->user_service = $user_service;
     }
 

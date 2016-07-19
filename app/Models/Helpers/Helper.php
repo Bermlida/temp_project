@@ -4,12 +4,20 @@ namespace App\Models\Helpers;
 
 class Helper
 {
-    private $prev_result;
+    private $storage;
+
+    public function __construct($storage = null, array $processor = [])
+    {
+        $this->storage = $storage;
+        foreach ($processor as $function => $arguments) {
+            $this->__call($function, (array)$arguments);
+        }
+    }
 
     public function __get($name) 
     {
         if ($name == "result") {
-            return $this->prev_result;
+            return $this->storage;
         }
         return null;
     }
@@ -17,16 +25,24 @@ class Helper
     public function __call($name, $arguments) 
     {
         $name = __NAMESPACE__ . '\\' . $name;
-        if (!is_null($this->prev_result)) {
-            array_unshift($arguments, $this->prev_result);
+        if (function_exists($name)) {
+            if (!is_null($this->storage)) {
+                array_unshift($arguments, $this->storage);
+            }
+
+            $return = call_user_func_array($name, $arguments);
+            $this->storage = $return ?? $this->storage;
+            return $this;
         }
-        $this->prev_result = call_user_func_array($name, $arguments);
-        return $this;
+        throw new \RuntimeException('Helper function not found. function name is ' . $name);
     }
 
     public static function __callStatic($name, $arguments) 
     {
         $name = __NAMESPACE__ . '\\' . $name;
-        return call_user_func_array($name, $arguments);
+        if (function_exists($name)) {
+            return call_user_func_array($name, $arguments);
+        }
+        throw new \RuntimeException('Helper function not found. function name is ' . $name);
     }
 }
