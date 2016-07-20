@@ -11,7 +11,8 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\UserService;
 use App\Models\Repositories\UserRepository;
 //use function App\Models\Helpers\hello_world;
-use App\Models\Helpers\Helper;
+//use App\Models\Helpers\Helper;
+//use common;
 
 class UsersController extends Controller
 {
@@ -23,6 +24,7 @@ class UsersController extends Controller
         //print Helper::hello_world('oh~~~~');
         //print (new Helper('mamamama', ['assss_world' => 'AhAhAhCheee']))->hello_world()->assss_world('test')->result;
         //print (new Helper())->hello_world('NaNaNa')->assss_world('test')->result;
+        //var_dump(common::hello_world("string")->result);
         $this->user_service = $user_service;
     }
 
