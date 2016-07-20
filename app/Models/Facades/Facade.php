@@ -9,8 +9,8 @@ abstract class Facade extends BaseFacade
 {
     protected static function getFacadeAccessor()
     {
-        $class = new ReflectionClass(new static);
-        return str_replace("Facade", "", $class->getShortName());
+        $name = (new ReflectionClass(new static))->getShortName();
+        return str_replace("Facade", "", $name);
     }
 
     protected static function resolveFacadeInstance($name)
