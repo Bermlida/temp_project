@@ -203,7 +203,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'user' => App\Models\Facades\UserRepositoryFacade::class,
-        'common' => App\Models\Facades\CommonHelperFacade::class,
+        'common' => App\Models\Facades\CommonHelpersFacade::class,
     ],
 
 ];

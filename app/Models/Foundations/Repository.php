@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Models\Repositories;
+namespace App\Models\Foundations;
+
+use ReflectionClass;
+use ReflectionProperty;
 
 abstract class Repository
 {
     public function __construct()
     {
-        $class = new \ReflectionClass($this);
-        $properties = $class->getProperties(\ReflectionProperty::IS_PRIVATE);
+        $class = new ReflectionClass($this);
+        $properties = $class->getProperties(ReflectionProperty::IS_PRIVATE);
         foreach ($properties as $property) {
             $property->setAccessible(true);
             $property_name = $property->getName();
@@ -33,7 +36,7 @@ abstract class Repository
 
     public function __get($name) 
     {
-        $class = new \ReflectionClass($this);
+        $class = new ReflectionClass($this);
         if ($class->hasProperty($name)) {
             $property = $class->getProperty($name);
             if ($property->isPrivate()) {
@@ -42,7 +45,7 @@ abstract class Repository
                 
                 $property_parents = [];
                 if (is_object($property_value)) {
-                    $property_class = new \ReflectionClass($property_value);
+                    $property_class = new ReflectionClass($property_value);
                     while ($property_parent = $property_class->getParentClass()) {
                         $property_parents[] = $property_parent->getName();
                         $property_class = $property_parent;

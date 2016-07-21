@@ -2,6 +2,8 @@
 
 namespace App\Models\Repositories;
 
+use App\Models\Foundations\Repository;
+
 class UserRepository extends Repository
 {
     private $user;

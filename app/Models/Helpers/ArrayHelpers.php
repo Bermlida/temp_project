@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Helpers;
+namespace App\Models\Helpers\ArrayHelpers;
 
 if (! function_exists('array_show')) {
     /**

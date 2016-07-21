@@ -10,6 +10,9 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\UserService;
 
+use common;
+use user;
+
 class UsersController extends Controller
 {
 
@@ -17,6 +20,14 @@ class UsersController extends Controller
 
     public function __construct(UserService $user_service)
     {
+        /*
+        print common::hello_worlds("123456");
+        print ((new common("22345678"))->hello_worlds()->assss_world(" do do do A------SSSSSSSS!!!")->result);
+        print ((new common(null, ["hello_worlds" => "22345678"]))->assss_world(" do do do A------SSSSSSSS!!!")->result);
+        print ((new common("22345678"))->assss_world(" do do do A------SSSSSSSS!!!")->result);
+        print ((new common("22345678", ["hello_world" => "32345678"]))->assss_world(" do do do A------SSSSSSSS!!!")->result);
+        */
+        //user::test();
         $this->user_service = $user_service;
     }
 

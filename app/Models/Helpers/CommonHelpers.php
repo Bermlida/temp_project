@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Helpers;
+namespace App\Models\Helpers\CommonHelpers;
 
 if (! function_exists('hello_world')) {
     /**
