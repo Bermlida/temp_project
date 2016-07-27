@@ -12,6 +12,7 @@ use App\Services\UserService;
 
 use common;
 use user;
+use Crypt;
 
 class UsersController extends Controller
 {
@@ -28,6 +29,11 @@ class UsersController extends Controller
         print ((new common("22345678", ["hello_world" => "32345678"]))->assss_world(" do do do A------SSSSSSSS!!!")->result);
         */
         //user::test();
+        $encrypt =  Crypt::encrypt("123456789");
+        $decrypt = Crypt::decrypt($encrypt);
+
+        //print $encrypt;
+        //print $decrypt;
         $this->user_service = $user_service;
     }
 
