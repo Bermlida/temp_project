@@ -44,7 +44,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   //return json_encode(Request::all());
         $callback = Request::input("callback");
         $result = $this->user_service->showUserList();
         
