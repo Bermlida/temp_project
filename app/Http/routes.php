@@ -15,4 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('users', 'UsersController');
+Route::group(['middleware' => 'auth:web'], function () {
+
+    Route::resource('users', 'UsersController');
+
+});
+
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

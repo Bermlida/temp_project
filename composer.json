@@ -8,7 +8,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "doctrine/annotations": "1.2.*",
-        "bermlida/module-extension": "*"
+        "bermlida/module-extension": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
