@@ -28,7 +28,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new authentication controller instance.
@@ -67,6 +67,16 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'api_token' => str_random(60),
         ]);
     }
+
+    //protected function authenticated($request, $user)
+    //{
+        //$signed = $request->session()->pull('signed', '');
+        //if ($signed != $user->id) {
+        //    $request->session()->put('signed', $user->id);
+        //}
+        //return redirect($this->redirectPath());
+    //}
 }

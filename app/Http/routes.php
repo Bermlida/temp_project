@@ -15,13 +15,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => 'auth:web'], function () {
+Route::auth();
+
+//Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/home', 'HomeController@index');
+
+//});
+
+//Route::get('/home', 'HomeController@index');
+
+Route::group(['middleware' => 'auth:api'], function () {
 
     Route::resource('users', 'UsersController');
 
 });
 
 
-Route::auth();
-
-Route::get('/home', 'HomeController@index');

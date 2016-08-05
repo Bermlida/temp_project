@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Models\Services;
 
-class TestService
+class AuthService
 {
     public function __construct($message = '')
     {
