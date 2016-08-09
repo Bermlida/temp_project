@@ -41,7 +41,12 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
+        'api_auth' => [
+            'driver' => 'token',
+            'provider' => 'users',
+        ],
+
+        'api_access' => [
             'driver' => 'token',
             'provider' => 'users',
         ],

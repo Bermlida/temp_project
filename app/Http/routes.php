@@ -25,10 +25,9 @@ Route::auth();
 
 //Route::get('/home', 'HomeController@index');
 
-Route::group(['middleware' => 'auth:api'], function () {
-
+Route::get('authorization', 'AuthController@authorization')->middleware(['auth:api_auth']);
+Route::group(['middleware' => 'auth:api_access'], function () {
     Route::resource('users', 'UsersController');
-
 });
 
 

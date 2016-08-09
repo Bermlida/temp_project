@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Validator;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Keychain;
+
+use App\User;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -62,21 +70,35 @@ class AuthController extends Controller
      * @return User
      */
     protected function create(array $data)
-    {
-        return User::create([
+    {        
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'api_token' => str_random(60),
+            'password' => Hash::make($data['password'])
         ]);
+
+        $user->api_key = Crypt::encrypt(str_random(60));
+        $user->api_token = Hash::make($user->api_key);
+        $user->save();   
+        return $user;
     }
 
-    //protected function authenticated($request, $user)
-    //{
-        //$signed = $request->session()->pull('signed', '');
-        //if ($signed != $user->id) {
-        //    $request->session()->put('signed', $user->id);
-        //}
-        //return redirect($this->redirectPath());
-    //}
+    public function authorization()
+    {
+        $user = Auth::user();
+        $signer = new Sha256();
+        $token = (new Builder())
+                            ->setIssuer('laravel_framework') // Configures the issuer (iss claim)
+                            ->setAudience($user->name) // Configures the audience (aud claim)
+                            ->setSubject('access_token') //sub
+                            ->setIssuedAt(\time()) // Configures the time that the token was issue (iat claim)
+                            ->setExpiration(\time() + 3600) // Configures the expiration time of the token (nbf claim)
+                            ->setNotBefore(\time() + 60) // Configures the time that the token can be used (nbf claim)
+                            ->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
+                            ->set('uid', 1) // Configures a new claim, called "uid"
+                            ->sign($signer, $user->api_key) // creates a signature using "testing" as key
+                            ->getToken(); // Retrieves the generated token
+
+        return response()->json(['name' => $user->name, 'token' => $token], 200);
+    }
 }
