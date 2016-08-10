@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
+use App\Models\Extensions\Auth\JsonWebTokenGuard;
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -25,7 +27,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(GateContract $gate)
     {
         $this->registerPolicies($gate);
-
-        //
+        
+        $this->app['auth']->extend('json_web_token', function ($app, string $name, array $config) {
+            $provider = $app['auth']->createUserProvider($config['provider']);
+            $request = $app['request'];
+            return new JsonWebTokenGuard($provider, $request);
+        });
     }
 }

@@ -17,16 +17,12 @@ Route::get('/', function () {
 
 Route::auth();
 
-//Route::group(['middleware' => 'auth'], function () {
+Route::get('/home', 'HomeController@index');
 
-    Route::get('/home', 'HomeController@index');
 
-//});
+Route::get('authorization', 'Auth\AuthController@authorization')->middleware(['auth:api_auth']);
 
-//Route::get('/home', 'HomeController@index');
-
-Route::get('authorization', 'AuthController@authorization')->middleware(['auth:api_auth']);
-Route::group(['middleware' => 'auth:api_access'], function () {
+Route::group(['prefix' => 'api/', 'middleware' => ['api', 'auth:api_access']], function () {
     Route::resource('users', 'UsersController');
 });
 

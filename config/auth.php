@@ -47,7 +47,7 @@ return [
         ],
 
         'api_access' => [
-            'driver' => 'token',
+            'driver' => 'json_web_token',
             'provider' => 'users',
         ],
     ],

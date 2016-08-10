@@ -32,6 +32,13 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
+     * The field name for login username to be used by the controller.
+     *
+     * @var string
+     */
+    protected $username = 'name';
+
+    /**
      * Where to redirect users after login / registration.
      *
      * @var string
@@ -45,7 +52,30 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware($this->guestMiddleware(), 
+            ['except' => ['logout', 'authorization']]);
+
+        $this->middleware('auth:api_auth', 
+            ['only' => ['authorization']]);
+    }
+
+    public function authorization()
+    {
+        $user = Auth::guard('api_auth')->user();
+        $signer = new Sha256();
+        $token = (new Builder())
+                            ->setIssuer('laravel_framework') // Configures the issuer (iss claim)
+                            ->setAudience($user->name) // Configures the audience (aud claim)
+                            ->setSubject('access_token') //sub
+                            ->setIssuedAt(\time()) // Configures the time that the token was issue (iat claim)
+                            ->setExpiration(\time() + 3600) // Configures the expiration time of the token (nbf claim)
+                            ->setNotBefore(\time() + 60) // Configures the time that the token can be used (nbf claim)
+                            ->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
+                            ->set('uid', 1) // Configures a new claim, called "uid"
+                            ->sign($signer, $user->api_key) // creates a signature using "testing" as key
+                            ->getToken(); // Retrieves the generated token
+
+        return response()->json(['name' => $user->name, 'token' => (string)$token], 200);
     }
 
     /**
@@ -57,8 +87,8 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'name' => 'required|max:255|unique:users',
+            'email' => 'required|email|max:255',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -77,28 +107,11 @@ class AuthController extends Controller
             'password' => Hash::make($data['password'])
         ]);
 
-        $user->api_key = Crypt::encrypt(str_random(60));
-        $user->api_token = Hash::make($user->api_key);
-        $user->save();   
+        $base_value = str_random(32);
+        $user->api_key = Crypt::encrypt($base_value);
+        $user->api_token = Hash::make($base_value);
+        $user->save();
+        
         return $user;
-    }
-
-    public function authorization()
-    {
-        $user = Auth::user();
-        $signer = new Sha256();
-        $token = (new Builder())
-                            ->setIssuer('laravel_framework') // Configures the issuer (iss claim)
-                            ->setAudience($user->name) // Configures the audience (aud claim)
-                            ->setSubject('access_token') //sub
-                            ->setIssuedAt(\time()) // Configures the time that the token was issue (iat claim)
-                            ->setExpiration(\time() + 3600) // Configures the expiration time of the token (nbf claim)
-                            ->setNotBefore(\time() + 60) // Configures the time that the token can be used (nbf claim)
-                            ->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
-                            ->set('uid', 1) // Configures a new claim, called "uid"
-                            ->sign($signer, $user->api_key) // creates a signature using "testing" as key
-                            ->getToken(); // Retrieves the generated token
-
-        return response()->json(['name' => $user->name, 'token' => $token], 200);
     }
 }

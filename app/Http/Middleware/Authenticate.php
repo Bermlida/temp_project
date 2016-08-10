@@ -4,9 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use Lcobucci\JWT\Parser;
-
-use App\User;
 
 class Authenticate
 {
@@ -22,22 +19,12 @@ class Authenticate
     {
         if (Auth::guard($guard)->guest()) {
             if ($guard == "api_auth" || $guard == "api_access") {
-                if ($guard == "api_access") {
-                    $token = (new Parser())->parse((string)($request->bearerToken()));
-                    $user = User::where('name', $token->getClaims('aud'))->first();
-                    $signer = Sha256();
-
-                    if (is_null($user) || !$token->verify($signer, $user->api_key)) {
-                        return response('Unauthorized.', 401);
-                    }                    
-                } else {
-                    return response('Unauthorized.', 401);
-                }                
+                return response('Unauthorized.', 401);
             } else {
-            //if ($request->ajax() || $request->wantsJson() || $guard == "api") {
-            //} else {
                 return redirect()->guest('login');
             }
+            //if ($request->ajax() || $request->wantsJson() || $guard == "api") {
+            //} else {
         }
 
         return $next($request);
