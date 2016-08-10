@@ -10,7 +10,8 @@
         "doctrine/annotations": "1.2.*",
         "bermlida/module-extension": "dev-master",
         "lcobucci/jwt": "^3.1",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "guzzlehttp/guzzle": "~5.3|~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
