@@ -70,8 +70,8 @@ class AuthController extends Controller
                             ->setIssuedAt(\time()) // Configures the time that the token was issue (iat claim)
                             ->setExpiration(\time() + 3600) // Configures the expiration time of the token (nbf claim)
                             ->setNotBefore(\time() + 60) // Configures the time that the token can be used (nbf claim)
-                            ->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
-                            ->set('uid', 1) // Configures a new claim, called "uid"
+                            ->setId(str_random(10), true) // Configures the id (jti claim), replicating as a header item
+                            ->set('scope', ["user" => ["get", "header"]]) // Configures a new claim, called "uid"
                             ->sign($signer, $user->api_key) // creates a signature using "testing" as key
                             ->getToken(); // Retrieves the generated token
 

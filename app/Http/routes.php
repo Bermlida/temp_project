@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('authorization', 'Auth\AuthController@authorization')->middleware(['auth:api_auth']);
 
-Route::group(['prefix' => 'api/', 'middleware' => ['api', 'auth:api_access']], function () {
+Route::group(['prefix' => 'api/', 'middleware' => ['auth:api_access']], function () {
     Route::resource('users', 'UsersController');
 });
 

@@ -25,8 +25,18 @@ class Authenticate
             }
             //if ($request->ajax() || $request->wantsJson() || $guard == "api") {
             //} else {
+        } else {
+            if ($guard == "api_auth" || $guard == "api_access") {
+                return $next($request);
+            } else {
+                return $next($request);
+            }
         }
 
-        return $next($request);
+    }
+
+    public function terminate($request, $response)
+    {
+        // 儲存 session 資料...
     }
 }
